@@ -8,13 +8,16 @@ public class Main {
     public static void main(String[] args) {
 
         GithubApiClient g = new GithubApiClient();
-        Commit[] commitsForRepo = g.getCommitsForRepo("zbycz/npress");
+        Commit[] commits = g.getCommitsForRepo("zbycz/npress");
         
         
-        System.out.println(Arrays.toString(commitsForRepo));
+        GateClient client = new GateClient();
+        client.run(commits);
         
-//        GateClient client = new GateClient();
-//        client.run();    
+        for (int i=0; i<commits.length; i++) {
+            System.out.println(commits[i].positive + "+/-"+commits[i].negative + "  -- " + commits[i].message);
+        }
+        
     }
 
     

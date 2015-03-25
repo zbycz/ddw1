@@ -35,9 +35,9 @@ public class GateClient {
     // whether the GATE is initialised
     private static boolean isGateInitilised = false;
 
-    public void run(){
+    public void run(Commit[] commits){
 
-		BasicConfigurator.configure();
+	BasicConfigurator.configure();
 
         if(!isGateInitilised){
 
@@ -59,7 +59,7 @@ public class GateClient {
             ProcessingResource gazeteerPR = (ProcessingResource) Factory.createResource("gate.creole.gazetteer.DefaultGazetteer");
 
             // locate the JAPE grammar file
-            File japeOrigFile = new File("C:\\pavel\\ddw\\gramatika.jape");
+            File japeOrigFile = new File("ddw1-gramatika.jape");
             java.net.URI japeURI = japeOrigFile.toURI();
 
             // create feature map for the transducer
@@ -87,12 +87,12 @@ public class GateClient {
 			annotationPipeline.add(gazeteerPR);
             annotationPipeline.add(japeTransducerPR);
 
-            // create a document
-            Document document = Factory.newDocument("Hi Czech Republic to U.S. we need Samsung Microsoft.");
-
             // create a corpus and add the document
             Corpus corpus = Factory.newCorpus("");
-            corpus.add(document);
+            for (int i=0; i<commits.length; i++) {
+                // create a document
+                corpus.add(Factory.newDocument(commits[i].message));
+            }
 
             // set the corpus to the pipeline
             annotationPipeline.setCorpus(corpus);
@@ -110,34 +110,14 @@ public class GateClient {
 
                 FeatureMap futureMap = null;
                 // get all Token annotations
-                AnnotationSet annSetTokens = as_default.get("Company",futureMap);
-                System.out.println("Number of Company annotations: " + annSetTokens.size());
+                AnnotationSet annSetTokens = as_default.get("Positive",futureMap);
+                //System.out.println("Number of Company annotations: " + annSetTokens.size());
+                commits[i].positive = annSetTokens.size();
 
 
-				annSetTokens = as_default.get("Country",futureMap);
-                System.out.println("Number of Country annotations: " + annSetTokens.size());
-
-                ArrayList tokenAnnotations = new ArrayList(annSetTokens);
-
-                // looop through the Token annotations
-                for(int j = 0; j < tokenAnnotations.size(); ++j) {
-
-                    // get a token annotation
-                    Annotation token = (Annotation)tokenAnnotations.get(j);
-
-                    // get the underlying string for the Token
-                    Node isaStart = token.getStartNode();
-                    Node isaEnd = token.getEndNode();
-                    String underlyingString = doc.getContent().getContent(isaStart.getOffset(), isaEnd.getOffset()).toString();
-                    System.out.println("Country: " + underlyingString);
-
-                    // get the features of the token
-                    FeatureMap annFM = token.getFeatures();
-
-                    // get the value of the "string" feature
-                    //String value = (String)annFM.get((Object)"string");
-                    //System.out.println("Token: " + value);
-                }
+		annSetTokens = as_default.get("Negative",futureMap);
+                //System.out.println("Number of Country annotations: " + annSetTokens.size());
+                commits[i].negative = annSetTokens.size();
             }
         } catch (GateException ex) {
             Logger.getLogger(GateClient.class.getName()).log(Level.SEVERE, null, ex);

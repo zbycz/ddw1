@@ -13,4 +13,6 @@ class Commit {
     String sha;
     String author;
     String message;
+    int positive;
+    int negative;
 }

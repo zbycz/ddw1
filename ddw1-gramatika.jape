@@ -1,0 +1,18 @@
+Phase: SentimentAnalysis
+Input: Lookup
+Options: control = brill
+ 
+Rule: SentimentPositive
+(
+  {Lookup.majorType == "sentiment", Lookup.minorType == "positive"}
+):reference
+-->
+ :reference.Positive = { rule= "SentimentPositive" }
+
+Rule: SentimentNegative
+(
+  {Lookup.majorType == "sentiment", Lookup.minorType == "negative"}
+):reference
+-->
+ :reference.Negative = { rule= "SentimentNegative" }
+

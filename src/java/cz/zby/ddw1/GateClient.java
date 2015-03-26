@@ -59,7 +59,7 @@ public class GateClient {
             ProcessingResource gazeteerPR = (ProcessingResource) Factory.createResource("gate.creole.gazetteer.DefaultGazetteer");
 
             // locate the JAPE grammar file
-            File japeOrigFile = new File("ddw1-gramatika.jape");
+            File japeOrigFile = new File("c:\\pavel\\ddw\\ddw1-web\\ddw1-gramatika.jape");
             java.net.URI japeURI = japeOrigFile.toURI();
 
             // create feature map for the transducer
@@ -84,7 +84,7 @@ public class GateClient {
             annotationPipeline.add(documentResetPR);
             //annotationPipeline.add(tokenizerPR);
             //annotationPipeline.add(sentenceSplitterPR);
-			annotationPipeline.add(gazeteerPR);
+            annotationPipeline.add(gazeteerPR);
             annotationPipeline.add(japeTransducerPR);
 
             // create a corpus and add the document
@@ -111,12 +111,12 @@ public class GateClient {
                 FeatureMap futureMap = null;
                 // get all Token annotations
                 AnnotationSet annSetTokens = as_default.get("Positive",futureMap);
-                //System.out.println("Number of Company annotations: " + annSetTokens.size());
+                //System.out.println("Number of + annotations: " + annSetTokens.size());
                 commits[i].positive = annSetTokens.size();
 
 
 		annSetTokens = as_default.get("Negative",futureMap);
-                //System.out.println("Number of Country annotations: " + annSetTokens.size());
+                //System.out.println("Number of - annotations: " + annSetTokens.size());
                 commits[i].negative = annSetTokens.size();
             }
         } catch (GateException ex) {

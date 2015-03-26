@@ -9,10 +9,10 @@ package cz.zby.ddw1;
  *
  * @author Pavel
  */
-class Commit {
-    String sha;
-    String author;
-    String message;
-    int positive;
-    int negative;
+public class Commit {
+    public String sha;
+    public String author;
+    public String message;
+    public int positive;
+    public int negative;
 }
